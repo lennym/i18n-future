@@ -1,0 +1,39 @@
+{
+  "name": "i18n-future",
+  "version": "0.0.0",
+  "description": "i18n for node",
+  "main": "index.js",
+  "directories": {
+    "example": "example",
+    "test": "test"
+  },
+  "scripts": {
+    "lint": "eslint ./lib",
+    "unit": "mocha --require test/helpers --recursive",
+    "test": "npm run lint && npm run unit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/lennym/i18n-future.git"
+  },
+  "keywords": [
+    "i18n"
+  ],
+  "author": "Leonard Martin <hello@lennym.co.uk>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lennym/i18n-future/issues"
+  },
+  "homepage": "https://github.com/lennym/i18n-future",
+  "devDependencies": {
+    "chai": "^2.3.0",
+    "mocha": "^2.2.4",
+    "eslint": "^0.20.0",
+    "sinon-chai": "^2.7.0",
+    "sinon": "^1.14.1",
+    "reqres": "^1.2.1"
+  },
+  "dependencies": {
+    "lodash": "^3.7.0"
+  }
+}

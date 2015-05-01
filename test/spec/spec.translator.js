@@ -13,6 +13,13 @@ describe('Translator', function () {
 
   describe('backend', function () {
 
+    it('throws if passed a backend without a `load` method', function () {
+      var fn = function () {
+        return new Translator({ backend: {} });
+      }
+      fn.should.throw();
+    });
+
     it('calls backend.load on initialisation', function () {
       backend.load.should.have.been.calledOnce;
     });

@@ -17,11 +17,13 @@ describe('i18n.middleware', function () {
       req = require('reqres').req();
       res = require('reqres').res();
       next = sinon.stub();
-      middleware = i18n.middleware({ cookie: { name: 'lang', maxAge: 86400 } });
       sinon.stub(i18n.Translator.prototype, 'translate');
+      sinon.stub(i18n.backends.fs, 'load').yieldsAsync(null, {});
+      middleware = i18n.middleware({ cookie: { name: 'lang', maxAge: 86400 } });
     });
     afterEach(function () {
       i18n.Translator.prototype.translate.restore();
+      i18n.backends.fs.load.restore();
     });
 
     it('is a function', function (done) {

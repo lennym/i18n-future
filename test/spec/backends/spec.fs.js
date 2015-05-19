@@ -26,6 +26,30 @@ describe('fs backend', function () {
 
   });
 
+  describe('with options', function () {
+
+    it('can handle a path created with path.resolve', function (done) {
+      backend.load({
+        path: require('path').resolve(__dirname, '../../../locales/__lng__/__ns__.json')
+      }, function (err, data) {
+        data.should.have.property('en');
+        data.should.have.property('fr');
+        done();
+      });
+    });
+
+    it('can handle a path created with path.join', function (done) {
+      backend.load({
+        path: require('path').join(__dirname, '../../../locales/__lng__/__ns__.json')
+      }, function (err, data) {
+        data.should.have.property('en');
+        data.should.have.property('fr');
+        done();
+      });
+    });
+
+  });
+
   describe('when no resources exist', function () {
 
     it('calls back with an empty datastore', function (done) {

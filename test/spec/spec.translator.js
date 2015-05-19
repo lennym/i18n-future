@@ -75,7 +75,7 @@ describe('Translator', function () {
         translator.translate('name.first', { lang: ['es', 'de'] }).should.equal('Franz');
       });
 
-    })
+    });
 
     describe('namespaces', function () {
 
@@ -106,6 +106,10 @@ describe('Translator', function () {
 
       it('returns the first key if passed multiple keys and no default option', function () {
         translator.translate(['not.a.key', 'also.not.a.key']).should.equal('not.a.key');
+      });
+
+      it('falls back to default language if unknown language is passed', function () {
+        translator.translate('name.last', { lang: 'not-a-language' }).should.equal('White');
       });
 
     });

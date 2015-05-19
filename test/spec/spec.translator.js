@@ -112,6 +112,11 @@ describe('Translator', function () {
         translator.translate('name.last', { lang: 'not-a-language' }).should.equal('White');
       });
 
+      it('does not add extra langauges to fallback langs on subsequent calls - BUGFIX', function () {
+        translator.translate('name.first', { lang: 'fr' }).should.equal('Jean');
+        translator.translate('name.first').should.equal('John');
+      });
+
     });
 
   });

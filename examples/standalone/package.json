@@ -1,0 +1,9 @@
+{
+  "name": "i18n-future--standalone-example",
+  "description": "Example script showing basic i18n-future behaviour",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "i18n-future": "*"
+  }
+}

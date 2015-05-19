@@ -30,7 +30,7 @@ index.js
     /default.json
 ```
 
-If you wish to create additional namespaces within your project, then create additional files within a language directory with names corresponding to the namespace. For details on how to configure resource paths see ["Resource path" documentation below](#resouce+path)
+If you wish to create additional namespaces within your project, then create additional files within a language directory with names corresponding to the namespace. For details on how to configure resource paths see ["Resource path" documentation below](#resource-path)
 
 ### Standalone:
 

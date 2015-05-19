@@ -93,6 +93,16 @@ describe('i18n.middleware', function () {
       });
     });
 
+    it('uses pre-existing req.lang property if it exists', function (done) {
+      req.headers['accept-language'] = 'en-GB;q=0.8,en-US;q=0.7';
+      req.lang = 'fr';
+      middleware(req, res, function () {
+        req.translate('key');
+        i18n.Translator.prototype.translate.should.have.been.calledWith('key', { lang: ['fr'] });
+        done();
+      });
+    });
+
   });
 
 });

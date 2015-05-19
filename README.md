@@ -57,6 +57,24 @@ app.use(function (req, res, next) {
 app.listen(3000);
 ```
 
+Middleware will detect the language from the `Accepts` header by default, but if custom language detection is required then additional middleware can be added which sets `req.lang`.
+
+### As express middleware with custom language detection:
+
+```javascript
+var app = require('express')();
+
+var i18n = require('i18n-future').middleware();
+
+app.use(function (req, res, next) {
+    // load language from querystring parameter - e.g. ?lang=en
+    req.lang = req.query.lang;
+    next();
+});
+app.use(i18n);
+...
+```
+
 ### Passing language and namespace options
 
 The translate method takes an additional options object with parameters for language and namespace to be loaded. This applies to both standalone and express middleware options (although in the middleware case any language option will overwrite the accepts header as a language preference)

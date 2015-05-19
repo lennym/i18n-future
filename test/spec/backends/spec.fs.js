@@ -23,6 +23,20 @@ describe('fs backend', function () {
         done();
       });
     });
+
+  });
+
+  describe('when no resources exist', function () {
+
+    it('calls back with an empty datastore', function (done) {
+      backend.load({
+        path: './not-a-real-location/__lng__/__ns__.json'
+      }, function (err, data) {
+        data.should.eql({});
+        done();
+      });
+    });
+
   });
 
 });

@@ -1,0 +1,11 @@
+{
+  "name": "i18n-future-express-example",
+  "description": "Example script showing express middleware i18n-future behaviour",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "express": "^4.12.4",
+    "i18n-future": "*",
+    "mustache-express": "^1.2.1"
+  }
+}

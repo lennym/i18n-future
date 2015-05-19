@@ -41,3 +41,54 @@ app.listen(3000);
 ```
 
 For running code examples, look in [the examples directory](./examples).
+
+## Initialisation options
+
+In each case options can be passed both to the i18n function, or to the middleware constructor equivalently.
+
+### Fallback language:
+
+Set the language which is used as the fallback when none is specified, or the requested key does not exist in the requested language - Default: `'en'`
+
+```javascript
+i18n({
+    fallbackLng: 'en-GB'
+});
+```
+
+### Fallback namespace:
+
+Set the namespace which is used as the fallback when none is specified, or the requested key does not exist in the requested namespace - Default: `'default'`
+
+```javascript
+i18n({
+    fallbackNamespace: 'admin'
+});
+```
+
+If required, both the `fallbackLng` and `fallbackNamespace` options can be passed as an array.
+
+### Resource path
+
+For the fs resource loader (currently the only backend supported), sets the location to load resource files from, and pattern for parsing namespace and language from the file path - Default: `locales/__lng__/__ns__.json`.
+
+```javascript
+i18n({
+    path: '/var/i18n/__lng__/__ns__/resource.json'
+});
+```
+
+### Backend
+
+Allows setting a custom backend for non-fs resource loading. Backend must export a `load` method, which will be called with `options` object and a callback. Default: [fs resource loader](./lib/backends/fs.js)
+
+```javascript
+i18n({
+    backend: {
+        load: function (options, callback) {
+            // do custom resource loading
+            callback(null, resources);
+        }
+    }
+});
+```

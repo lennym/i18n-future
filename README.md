@@ -57,9 +57,9 @@ app.use(function (req, res, next) {
 app.listen(3000);
 ```
 
-Middleware will detect the language from the `Accepts` header by default, but if custom language detection is required then additional middleware can be added which sets `req.lang`.
-
 ### As express middleware with custom language detection:
+
+Middleware will detect the language from the `Accepts` header by default, but if custom language detection is required then additional middleware can be added which sets `req.lang`.
 
 ```javascript
 var app = require('express')();

@@ -26,7 +26,7 @@ index.js
 
 If you wish to create additional namespaces within your project, then create additional files within a language directory with names corresponding to the namespace. For details on how to configure resource paths see ["Resource path" documentation below](#resouce+path)
 
-Standalone:
+### Standalone:
 
 ```javascript
 var i18n = require('i18n-future');
@@ -37,7 +37,7 @@ i18n.on('ready', function () {
 });
 ```
 
-As express middleware:
+### As express middleware:
 
 ```javascript
 var app = require('express')();
@@ -55,6 +55,22 @@ app.use(function (req, res, next) {
 });
 
 app.listen(3000);
+```
+
+### Passing language and namespace options
+
+The translate method takes an additional options object with parameters for language and namespace to be loaded. This applies to both standalone and express middleware options (although in the middleware case any language option will overwrite the accepts header as a language preference)
+
+```javascript
+// simple language option
+i18n.translate('greeting', { lang: 'fr' });
+// multiple langauge options as an array
+i18n.translate('greeting', { lang: ['en-GB', 'en'] });
+```
+
+```javascript
+// simple namespace option
+i18n.translate('greeting', { namespace: 'admin' });
 ```
 
 For running code examples, look in [the examples directory](./examples).

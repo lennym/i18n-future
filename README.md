@@ -149,3 +149,24 @@ i18n({
     }
 });
 ```
+
+Resources returned by the callback will be an object of the following form:
+
+```javascript
+{
+    en: {
+        default: {
+            ... translation keys for default namespace ...
+        }
+        'other-namespace': {
+            ... translation keys for afternative namespace...
+        }
+    },
+    fr: {
+        ...
+    },
+    de: {
+        ...
+    }
+}
+```

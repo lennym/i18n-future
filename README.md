@@ -9,6 +9,23 @@ The aim of this project is to create a module-safe, lightweight translation libr
 
 ## Usage
 
+First create some resource files. These should be json files and the location of the file within your project will define the language it corresponds to.
+
+An example file structure would look like:
+
+```
+index.js
+/locales
+  /en
+    /default.json
+  /fr
+    /default.json
+  /de
+    /default.json
+```
+
+If you wish to create additional namespaces within your project, then create additional files within a language directory with names corresponding to the namespace. For details on how to configure resource paths see ["Resource path" documentation below](#resouce+path)
+
 Standalone:
 
 ```javascript

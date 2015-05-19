@@ -7,6 +7,12 @@ The [i18next](http://www.npmjs.com/package/i18next) project has a number of issu
 
 The aim of this project is to create a module-safe, lightweight translation library for a node environment, based on similar concepts to i18next.
 
+## Install
+
+```
+npm install [--save] i18n-future
+```
+
 ## Usage
 
 First create some resource files. These should be json files and the location of the file within your project will define the language it corresponds to.

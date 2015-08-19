@@ -119,6 +119,32 @@ describe('Translator', function () {
 
     });
 
+    describe('pre-defined resources', function () {
+
+      beforeEach(function () {
+        translator = new Translator({
+          backend: backend,
+          resources: require('../stubs/predefined')
+        });
+        backend.load.yield(null, require('../stubs/simple'));
+      });
+
+      it('includes translations from the pre-defined resources', function () {
+        translator.translate('predef').should.equal('true');
+        translator.translate('predef', { lang: 'fr' }).should.equal('vrai');
+      });
+
+      it('includes translations from resources loaded from backend', function () {
+        translator.translate('name.first', { lang: 'fr' }).should.equal('Jean');
+        translator.translate('name.first').should.equal('John');
+      });
+
+      it('does not mutate the pre-defined resources', function () {
+        require('../stubs/predefined').en.default.should.not.have.property('name');
+      });
+
+    });
+
   });
 
 });

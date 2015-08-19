@@ -9,7 +9,7 @@
   },
   "scripts": {
     "lint": "eslint ./lib",
-    "unit": "mocha --require test/helpers --recursive",
+    "unit": "mocha --require test/helpers --recursive ./test/spec",
     "test": "npm run lint && npm run unit"
   },
   "repository": {

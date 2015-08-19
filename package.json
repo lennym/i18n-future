@@ -1,6 +1,6 @@
 {
   "name": "i18n-future",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "i18n for node",
   "main": "index.js",
   "directories": {

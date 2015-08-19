@@ -103,6 +103,21 @@ For running code examples, look in [the examples directory](./examples).
 
 In each case options can be passed both to the i18n function, or to the middleware constructor equivalently.
 
+### Pre-defined resources
+
+You can manually define resource sets at initialisation by passing in an object with the `resources` parameter of the options. This is useful when you have shared translations that are used across a number of modules, so you may wish to load from npm modules or similar - Default: `{}`
+
+```javascript
+i18n({
+    resources: {
+      en: require('shared-translations').en,
+      fr: require('shared-translations').fr
+    }
+});
+```
+
+This object should have the same structure as the resources returned by [backends](#backend)
+
 ### Fallback language:
 
 Set the language which is used as the fallback when none is specified, or the requested key does not exist in the requested language - Default: `'en'`

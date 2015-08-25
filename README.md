@@ -150,6 +150,18 @@ i18n({
 });
 ```
 
+### Base directory
+
+The root directory in which to look for resources on the `path` defined - Default: `process.cwd()`
+
+```javascript
+i18n({
+    baseDir: __dirname
+});
+```
+
+*Note: if you are using i18n-future inside a module which is likely to be installed as a child dependency of another project then it is highly recommended that you set this property.*
+
 ### Backend
 
 Allows setting a custom backend for non-fs resource loading. Backend must export a `load` method, which will be called with `options` object and a callback. Default: [fs resource loader](./lib/backends/fs.js)

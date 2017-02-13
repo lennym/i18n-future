@@ -65,6 +65,14 @@ describe('Translator', function () {
         translator.translate('name.first', { lang: 'fr' }).should.equal('Jean');
       });
 
+      it('handles a lang passed as a string argument', function () {
+        translator.translate('name.first', 'fr').should.equal('Jean');
+      });
+
+      it('handles a lang passed as an array argument', function () {
+        translator.translate('name.first', ['fr', 'de']).should.equal('Jean');
+      });
+
       it('falls back to less specific language if a specific language is provided', function () {
         translator.translate('name.first', { lang: 'en-GB' }).should.equal('John');
         translator.translate('name.last', { lang: 'en-GB' }).should.equal('Smith');
@@ -72,7 +80,14 @@ describe('Translator', function () {
 
       it('supports a list of languages being provided', function () {
         translator.translate('name.first', { lang: ['de'] }).should.equal('Franz');
+        translator.translate('name.first', { lang: ['de', 'fr'] }).should.equal('Franz');
+        translator.translate('name.first', ['de', 'fr']).should.equal('Franz');
+      });
+
+      it('falls through if a translation is not available for a language', function () {
+        translator.translate('name.first', { lang: ['de'] }).should.equal('Franz');
         translator.translate('name.first', { lang: ['es', 'de'] }).should.equal('Franz');
+        translator.translate('name.first', ['es', 'de']).should.equal('Franz');
       });
 
     });

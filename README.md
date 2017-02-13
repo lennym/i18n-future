@@ -39,7 +39,7 @@ var i18n = require('i18n-future');
 
 // i18n fires a "ready" event when it is done loading resources
 i18n.on('ready', function () {
-    i18n.translate('name.first', { lang: 'en' });
+    i18n.translate('name.first', 'fr');
 });
 ```
 
@@ -85,12 +85,16 @@ app.use(i18n);
 
 The translate method takes an additional options object with parameters for language and namespace to be loaded. This applies to both standalone and express middleware options (although in the middleware case any language option will overwrite the accepts header as a language preference)
 
+If the options are set to an array or a string, then this will be used as the language.
+
 ```javascript
 // simple language option
-i18n.translate('greeting', { lang: 'fr' });
+i18n.translate('greeting', 'fr');
 // multiple langauge options as an array
-i18n.translate('greeting', { lang: ['en-GB', 'en'] });
+i18n.translate('greeting', ['en-GB', 'en']);
 ```
+
+If multiple langauges are passed, then the first matching language will be used. For example: `i18n.translate('greeting', ['en-GB', 'en']);` will look for `en-GB` first, and fall back to `en` only if a translation for `en-GB` is not found.
 
 ```javascript
 // simple namespace option

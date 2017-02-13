@@ -39,7 +39,7 @@ var i18n = require('i18n-future');
 
 // i18n fires a "ready" event when it is done loading resources
 i18n.on('ready', function () {
-    i18n.translate('name.first');
+    i18n.translate('name.first', { lang: 'en' });
 });
 ```
 

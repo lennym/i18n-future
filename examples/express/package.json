@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "express": "^4.12.4",
-    "i18n-future": "*"
+    "express": "^4.16.4",
+    "hmpo-i18n": "*"
   }
 }

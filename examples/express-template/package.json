@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "express": "^4.12.4",
-    "i18n-future": "*",
-    "mustache-express": "^1.2.1"
+    "express": "^4.16.4",
+    "hmpo-i18n": "*",
+    "mustache-express": "^1.2.8"
   }
 }

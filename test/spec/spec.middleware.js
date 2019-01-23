@@ -88,7 +88,7 @@ describe('i18n.middleware', function () {
     it('passes cookie options to res.cookie', function (done) {
       req.headers['accept-language'] = 'en-GB;q=0.8,en-US;q=0.7';
       middleware(req, res, function () {
-        res.cookie.should.have.been.calledWith('lang', 'en-GB,en-US', sinon.match({ maxAge: 86400 }));
+        res.cookie.should.have.been.calledWith('lang', 'en-GB,en-US', { maxAge: 86400, name: 'lang' });
         done();
       });
     });

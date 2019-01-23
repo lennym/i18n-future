@@ -4,6 +4,6 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "i18n-future": "*"
+    "hmpo-i18n": "*"
   }
 }

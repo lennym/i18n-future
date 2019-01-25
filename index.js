@@ -1,1 +1,1 @@
-module.exports = require('./lib/i18n-future');
+module.exports = require('./lib/i18n');

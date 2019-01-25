@@ -1,29 +1,35 @@
 var i18n = require('../../index');
 
 describe('i18n.middleware', function () {
+  var req, res, next, app, options;
+  beforeEach(function () {
+    app = {
+      use: sinon.stub(),
+      get: sinon.stub().withArgs('view').returns(class {}),
+      set: sinon.stub()
+    };
+    req = require('reqres').req();
+    res = require('reqres').res();
+    next = sinon.stub();
+    sinon.stub(i18n.Translator.prototype, 'translate');
+    sinon.stub(i18n.backends.fs, 'load').yieldsAsync(null, {});
+    options = { cookie: { name: 'lang', maxAge: 86400 } };
+  });
+  afterEach(function () {
+    i18n.Translator.prototype.translate.restore();
+    i18n.backends.fs.load.restore();
+  });
 
-  it('exports a function', function () {
+  it('returns a function', function () {
     i18n.middleware.should.be.a('function');
   });
 
-  it('returns a middleware stack', function () {
-    i18n.middleware().should.be.a('function');
-  });
-
   describe('req.translate', function () {
+    var middleware;
 
-    var req, res, next, middleware;
     beforeEach(function () {
-      req = require('reqres').req();
-      res = require('reqres').res();
-      next = sinon.stub();
-      sinon.stub(i18n.Translator.prototype, 'translate');
-      sinon.stub(i18n.backends.fs, 'load').yieldsAsync(null, {});
-      middleware = i18n.middleware({ cookie: { name: 'lang', maxAge: 86400 } });
-    });
-    afterEach(function () {
-      i18n.Translator.prototype.translate.restore();
-      i18n.backends.fs.load.restore();
+      i18n.middleware(app, options);
+      middleware = app.use.args[0][0];
     });
 
     it('is a function', function (done) {
@@ -42,6 +48,7 @@ describe('i18n.middleware', function () {
     });
 
     it('sets language for translation from accept header', function (done) {
+      options.detect = true;
       req.headers['accept-language'] = 'en';
       middleware(req, res, function () {
         req.translate('key');
@@ -51,6 +58,7 @@ describe('i18n.middleware', function () {
     });
 
     it('handles complex language headers', function (done) {
+      options.detect = true;
       req.headers['accept-language'] = 'en-GB;q=0.8,en-US;q=0.7';
       middleware(req, res, function () {
         req.translate('key');
@@ -78,6 +86,7 @@ describe('i18n.middleware', function () {
     });
 
     it('saves language value back to a cookie', function (done) {
+      options.detect = true;
       req.headers['accept-language'] = 'en-GB;q=0.8,en-US;q=0.7';
       middleware(req, res, function () {
         res.cookie.should.have.been.calledWith('lang', 'en-GB,en-US');
@@ -86,6 +95,7 @@ describe('i18n.middleware', function () {
     });
 
     it('passes cookie options to res.cookie', function (done) {
+      options.detect = true;
       req.headers['accept-language'] = 'en-GB;q=0.8,en-US;q=0.7';
       middleware(req, res, function () {
         res.cookie.should.have.been.calledWith('lang', 'en-GB,en-US', { maxAge: 86400, name: 'lang' });
@@ -93,14 +103,71 @@ describe('i18n.middleware', function () {
       });
     });
 
-    it('uses pre-existing req.lang property if it exists', function (done) {
+    it('uses pre-existing lang cookie property if it exists', function (done) {
+      options.detect = true;
       req.headers['accept-language'] = 'en-GB;q=0.8,en-US;q=0.7';
-      req.lang = 'fr';
+      req.cookies.lang = 'fr';
       middleware(req, res, function () {
         req.translate('key');
         i18n.Translator.prototype.translate.should.have.been.calledWith('key', { lang: ['fr'] });
         done();
       });
+    });
+
+  });
+
+  describe('localisedViews middleware', () => {
+    let OriginalViewClass, NewClass, options, cb;
+
+    beforeEach(() => {
+        OriginalViewClass = class {
+            render() {}
+            resolve() {}
+        };
+        sinon.stub(OriginalViewClass.prototype, 'render');
+        sinon.stub(OriginalViewClass.prototype, 'resolve');
+
+        app.get = sinon.stub().withArgs('view').returns(OriginalViewClass);
+
+        i18n.middleware(app, options);
+        NewClass = app.set.args[0][1];
+        cb = sinon.stub();
+        options = {};
+    });
+
+    it('sets the view class to an exended view class', () => {
+        app.set.should.have.been.calledWithExactly('view', sinon.match.func);
+
+        let instance = new NewClass;
+        instance.should.be.an.instanceOf(OriginalViewClass);
+    });
+
+    it('tries localised path', () => {
+        let instance = new NewClass;
+        instance.path = '/path/file.html';
+        options.lang = ['fr'];
+
+        instance.render(options, cb);
+
+        OriginalViewClass.prototype.resolve.should.have.been.calledWithExactly('/path', 'file_fr.html');
+    });
+
+    it('tupdates render path if resolve succeeds', () => {
+        let instance = new NewClass;
+        instance.path = '/path/file.html';
+        options.lang = ['fr'];
+        OriginalViewClass.prototype.resolve.withArgs('/path', 'file_fr.html').returns('/resolved/path/file_fr.html');
+
+        instance.render(options, cb);
+
+        instance.path.should.equal('/resolved/path/file_fr.html');
+    });
+
+    it('calls super render', () => {
+        let instance = new NewClass;
+
+        instance.render(options, cb);
+        OriginalViewClass.prototype.render.should.have.been.calledWithExactly(options, cb);
     });
 
   });

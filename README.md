@@ -1,4 +1,4 @@
-# i18n-future
+# hmpo-i18n
 i18n for node
 
 A ground up rebuild of the [i18next](http://www.npmjs.com/package/i18next) project for a node environment.
@@ -10,7 +10,7 @@ The aim of this project is to create a module-safe, lightweight translation libr
 ## Install
 
 ```
-npm install [--save] i18n-future
+npm install [--save] hmpo-i18n
 ```
 
 ## Usage
@@ -35,7 +35,7 @@ If you wish to create additional namespaces within your project, then create add
 ### Standalone:
 
 ```javascript
-var i18n = require('i18n-future');
+var i18n = require('hmpo-i18n');
 
 // i18n fires a "ready" event when it is done loading resources
 i18n.on('ready', function () {
@@ -48,9 +48,9 @@ i18n.on('ready', function () {
 ```javascript
 var app = require('express')();
 
-var i18n = require('i18n-future').middleware();
+var i18n = require('hmpo-i18n');
 
-app.use(i18n);
+i18n.middleware(app);
 
 app.use(function (req, res, next) {
     // a translate method is now available on the request
@@ -65,19 +65,21 @@ app.listen(3000);
 
 ### As express middleware with custom language detection:
 
-Middleware will detect the language from the `Accepts` header by default, but if custom language detection is required then additional middleware can be added which sets `req.lang`.
+Middleware can detect the language from the `Accepts` header by if the `detect` option is true.
+A custom language can be set using `req.setLanguage(lang)`.
 
 ```javascript
 var app = require('express')();
 
-var i18n = require('i18n-future').middleware();
+var i18n = require('hmpo-i18n');
+
+i18n.middleware(app);
 
 app.use(function (req, res, next) {
     // load language from querystring parameter - e.g. ?lang=en
-    req.lang = req.query.lang;
+    req.setLanguage(req.query.lang);
     next();
 });
-app.use(i18n);
 ...
 ```
 
@@ -164,7 +166,7 @@ i18n({
 });
 ```
 
-*Note: if you are using i18n-future inside a module which is likely to be installed as a child dependency of another project then it is highly recommended that you set this property.*
+*Note: if you are using hmpo-i18n inside a module which is likely to be installed as a child dependency of another project then it is highly recommended that you set this property.*
 
 ### Backend
 

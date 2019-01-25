@@ -1,4 +1,4 @@
-var i18n = require('../../');
+var i18n = require('../..');
 
 describe('i18n-future', function () {
 

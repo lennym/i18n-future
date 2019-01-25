@@ -119,16 +119,16 @@ describe('Translator', function () {
         translator.translate('not.a.key', {self: true}).should.equal('not.a.key');
       });
 
-      it('returns undefined if only passed a single key and no default option and no self option', function () {
-        expect(translator.translate('not.a.key')).to.equal(undefined);
+      it('returns undefined if only passed a single key and no default option and self option disabled', function () {
+        translator.translate('not.a.key', { self: false }).should.be.false;
       });
 
       it('returns the first key if passed multiple keys and no default option and self option', function () {
-        translator.translate(['not.a.key', 'also.not.a.key'], {self: true}).should.equal('not.a.key');
+        translator.translate(['not.a.key', 'also.not.a.key']).should.equal('not.a.key');
       });
 
       it('returns undefined if passed multiple keys and no default option and self option', function () {
-        expect(translator.translate(['not.a.key', 'also.not.a.key'])).to.equal(undefined);
+        translator.translate(['not.a.key', 'also.not.a.key'], { self: false }).should.be.false;
       });
 
       it('falls back to default language if unknown language is passed', function () {

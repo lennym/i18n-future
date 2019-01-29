@@ -114,6 +114,16 @@ describe('i18n.middleware', function () {
       });
     });
 
+    it('reduce lang list to allowed langs if specified', function (done) {
+      options.allowedLangs = ['de', 'en'];
+      req.cookies.lang = 'fr,es,de,it';
+      middleware(req, res, function () {
+        req.translate('key');
+        i18n.Translator.prototype.translate.should.have.been.calledWith('key', { lang: ['de'] });
+        done();
+      });
+    });
+
   });
 
   describe('localisedViews middleware', () => {

@@ -1,4 +1,5 @@
 var backend = require('../../../lib/backends/fs');
+var path =  require('path');
 
 describe('fs backend', function () {
 
@@ -30,7 +31,7 @@ describe('fs backend', function () {
 
     it('can handle a path created with path.resolve', function (done) {
       backend.load({
-        path: require('path').resolve(__dirname, '../../../locales/__lng__/__ns__.json')
+        path: path.resolve(__dirname, '../../../locales/__lng__/__ns__.json')
       }, function (err, data) {
         data.should.have.property('en');
         data.should.have.property('fr');
@@ -40,10 +41,46 @@ describe('fs backend', function () {
 
     it('can handle a path created with path.join', function (done) {
       backend.load({
-        path: require('path').join(__dirname, '../../../locales/__lng__/__ns__.json')
+        path: path.join(__dirname, '../../../locales/__lng__/__ns__.json')
       }, function (err, data) {
         data.should.have.property('en');
         data.should.have.property('fr');
+        done();
+      });
+    });
+
+    it('uses the baseDir from options', function (done) {
+      backend.load({
+        baseDir: path.resolve(__dirname)
+      }, function (err, data) {
+        data.should.have.property('en');
+        data.should.have.property('de');
+        done();
+      });
+    });
+
+    it('uses a baseDir array from options', function (done) {
+      backend.load({
+        baseDir: [
+          path.resolve(__dirname, '../../../'),
+          path.resolve(__dirname)
+        ]
+      }, function (err, data) {
+        data.en.should.eql({
+          test: {
+            name: 'Jack'
+          }
+        });
+        data.fr.should.eql({
+          test: {
+            name: 'Jean'
+          }
+        });
+        data.de.should.eql({
+          test: {
+            name: 'Hans'
+          }
+        });
         done();
       });
     });

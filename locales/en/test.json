@@ -1,3 +1,6 @@
 {
-  "name": "John"
+  "name": "John",
+  "deep": {
+    "object": "English"
+  }
 }

@@ -13,12 +13,18 @@ describe('fs backend', function () {
       backend.load(function (err, data) {
         data.en.should.eql({
           test: {
-            name: 'John'
+            name: 'John',
+            deep: {
+              object: 'English'
+            }
           }
         });
         data.fr.should.eql({
           test: {
-            name: 'Jean'
+            name: 'Jean',
+            deep: {
+              object: 'French'
+            }
           }
         });
         done();
@@ -62,23 +68,32 @@ describe('fs backend', function () {
     it('uses a baseDir array from options', function (done) {
       backend.load({
         baseDir: [
-          path.resolve(__dirname, '../../../'),
-          path.resolve(__dirname)
+          path.resolve(__dirname),
+          path.resolve(__dirname, '../../../')
         ]
       }, function (err, data) {
         data.en.should.eql({
           test: {
-            name: 'Jack'
+            name: 'Jack',
+            deep: {
+              object: 'Other English'
+            }
           }
         });
         data.fr.should.eql({
           test: {
-            name: 'Jean'
+            name: 'Jean',
+            deep: {
+              object: 'French'
+            }
           }
         });
         data.de.should.eql({
           test: {
-            name: 'Hans'
+            name: 'Hans',
+            deep: {
+              object: 'German'
+            }
           }
         });
         done();

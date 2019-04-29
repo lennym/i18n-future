@@ -1,3 +1,6 @@
 {
-  "name": "Jean"
+  "name": "Jean",
+  "deep": {
+    "object": "French"
+  }
 }

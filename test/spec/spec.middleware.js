@@ -164,10 +164,10 @@ describe('i18n.middleware', function () {
 
         instance.render(options, cb);
 
-        localisedView.existsFn.should.have.been.calledWith('/view2/path/file_fr.html');
         localisedView.existsFn.should.have.been.calledWith('/view1/path/file_fr.html');
-        localisedView.existsFn.should.have.been.calledWith('/view2/path/file_en.html');
+        localisedView.existsFn.should.have.been.calledWith('/view2/path/file_fr.html');
         localisedView.existsFn.should.have.been.calledWith('/view1/path/file_en.html');
+        localisedView.existsFn.should.have.been.calledWith('/view2/path/file_en.html');
 
       });
 
@@ -176,7 +176,6 @@ describe('i18n.middleware', function () {
         instance.path = '/path/file.html';
         options.lang = ['fr'];
 
-        localisedView.existsFn.withArgs('/view1/path/file_fr.html').yields(true);
         localisedView.existsFn.withArgs('/view2/path/file_fr.html').yields(true);
         localisedView.existsFn.withArgs('/view1/path/file_en.html').yields(true);
 

@@ -1,13 +1,24 @@
 var i18n = require('../../index');
 
+var localisedView = require('../../lib/localised-view');
+
 describe('i18n.middleware', function () {
-  var req, res, next, app, options;
+  var req, res, next, app, options, OriginalViewClass;
   beforeEach(function () {
+    OriginalViewClass = class {
+      render(){ }
+    };
     app = {
       use: sinon.stub(),
-      get: sinon.stub().withArgs('view').returns(class {}),
+      get: sinon.stub(),
       set: sinon.stub()
     };
+    app.get.returns();
+    app.get.withArgs('view').returns(OriginalViewClass);
+    app.get.withArgs('views').returns([ '/view1', '/view2' ]);
+
+    sinon.stub(localisedView, 'existsFn').yields(false);
+
     req = require('reqres').req();
     res = require('reqres').res();
     next = sinon.stub();
@@ -18,6 +29,7 @@ describe('i18n.middleware', function () {
   afterEach(function () {
     i18n.Translator.prototype.translate.restore();
     i18n.backends.fs.load.restore();
+    localisedView.existsFn.restore();
   });
 
   it('returns a function', function () {
@@ -127,17 +139,10 @@ describe('i18n.middleware', function () {
   });
 
   describe('localisedViews middleware', () => {
-    let OriginalViewClass, NewClass, options, cb;
+    let NewClass, options, cb;
 
     beforeEach(() => {
-        OriginalViewClass = class {
-            render() {}
-            resolve() {}
-        };
         sinon.stub(OriginalViewClass.prototype, 'render');
-        sinon.stub(OriginalViewClass.prototype, 'resolve');
-
-        app.get = sinon.stub().withArgs('view').returns(OriginalViewClass);
 
         i18n.middleware(app, options);
         NewClass = app.set.args[0][1];
@@ -152,25 +157,32 @@ describe('i18n.middleware', function () {
         instance.should.be.an.instanceOf(OriginalViewClass);
     });
 
-    it('tries localised path', () => {
+    it('tries localised paths', () => {
+        let instance = new NewClass;
+        instance.path = '/path/file.html';
+        options.lang = ['fr', 'en'];
+
+        instance.render(options, cb);
+
+        localisedView.existsFn.should.have.been.calledWith('/view2/path/file_fr.html');
+        localisedView.existsFn.should.have.been.calledWith('/view1/path/file_fr.html');
+        localisedView.existsFn.should.have.been.calledWith('/view2/path/file_en.html');
+        localisedView.existsFn.should.have.been.calledWith('/view1/path/file_en.html');
+
+      });
+
+    it('updates render path with first found file', () => {
         let instance = new NewClass;
         instance.path = '/path/file.html';
         options.lang = ['fr'];
 
-        instance.render(options, cb);
-
-        OriginalViewClass.prototype.resolve.should.have.been.calledWithExactly('/path', 'file_fr.html');
-    });
-
-    it('tupdates render path if resolve succeeds', () => {
-        let instance = new NewClass;
-        instance.path = '/path/file.html';
-        options.lang = ['fr'];
-        OriginalViewClass.prototype.resolve.withArgs('/path', 'file_fr.html').returns('/resolved/path/file_fr.html');
+        localisedView.existsFn.withArgs('/view1/path/file_fr.html').yields(true);
+        localisedView.existsFn.withArgs('/view2/path/file_fr.html').yields(true);
+        localisedView.existsFn.withArgs('/view1/path/file_en.html').yields(true);
 
         instance.render(options, cb);
 
-        instance.path.should.equal('/resolved/path/file_fr.html');
+        instance.path.should.equal('/view2/path/file_fr.html');
     });
 
     it('calls super render', () => {

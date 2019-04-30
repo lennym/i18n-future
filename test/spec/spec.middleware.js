@@ -147,7 +147,7 @@ describe('i18n.middleware', function () {
         i18n.middleware(app, options);
         NewClass = app.set.args[0][1];
         cb = sinon.stub();
-        options = {};
+        options = { noCache: true };
     });
 
     it('sets the view class to an exended view class', () => {
@@ -159,7 +159,8 @@ describe('i18n.middleware', function () {
 
     it('tries localised paths', () => {
         let instance = new NewClass;
-        instance.path = '/path/file.html';
+        instance.path = 'path/file';
+        instance.ext = '.html';
         options.lang = ['fr', 'en'];
 
         instance.render(options, cb);
@@ -173,15 +174,15 @@ describe('i18n.middleware', function () {
 
     it('updates render path with first found file', () => {
         let instance = new NewClass;
-        instance.path = '/path/file.html';
+        instance.path = 'path/file.html';
         options.lang = ['fr'];
 
-        localisedView.existsFn.withArgs('/view2/path/file_fr.html').yields(true);
         localisedView.existsFn.withArgs('/view1/path/file_en.html').yields(true);
+        localisedView.existsFn.withArgs('/view2/path/file_fr.html').yields(true);
 
         instance.render(options, cb);
 
-        instance.path.should.equal('/view2/path/file_fr.html');
+        instance.path.should.equal('path/file_fr.html');
     });
 
     it('calls super render', () => {

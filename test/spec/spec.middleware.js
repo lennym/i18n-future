@@ -106,6 +106,15 @@ describe('i18n.middleware', function () {
       });
     });
 
+    it('saves detects a language from a query param', function (done) {
+      options.query = 'lang';
+      req.query = { lang: 'fr , en-GB, en-US;q-0.7' };
+      middleware(req, res, function () {
+        res.cookie.should.have.been.calledWith('lang', 'fr,en-GB,en-US');
+        done();
+      });
+    });
+
     it('passes cookie options to res.cookie', function (done) {
       options.detect = true;
       req.headers['accept-language'] = 'en-GB;q=0.8,en-US;q=0.7';

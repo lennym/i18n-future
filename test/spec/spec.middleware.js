@@ -168,6 +168,7 @@ describe('i18n.middleware', function () {
 
     it('tries localised paths', () => {
         let instance = new NewClass;
+        instance.name = 'path/file.html';
         instance.path = 'path/file';
         instance.ext = '.html';
         options.lang = ['fr', 'en'];
@@ -183,6 +184,7 @@ describe('i18n.middleware', function () {
 
     it('updates render path with first found file', () => {
         let instance = new NewClass;
+        instance.name = 'path/file.html';
         instance.path = 'path/file.html';
         options.lang = ['fr'];
 
@@ -192,6 +194,7 @@ describe('i18n.middleware', function () {
         instance.render(options, cb);
 
         instance.path.should.equal('path/file_fr.html');
+        instance.name.should.equal('path/file_fr.html');
     });
 
     it('calls super render', () => {
